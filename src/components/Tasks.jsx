@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { addTask, deleteTask, updateTaskStatus } from '../redux/tasksSlice';
 import { useState, useEffect } from 'react';
-
+// useSelector is a React-Redux hook that lets your component read data from the Redux store.
 const Tasks = ({ boardName, folderName }) => {
   const dispatch = useDispatch();
   const username = useSelector((state) => state.users.username);
@@ -11,6 +11,7 @@ const Tasks = ({ boardName, folderName }) => {
 
   const [formVisible, setFormVisible] = useState(false);
   const [notification, setNotification] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
   const handleAddTask = (e) => {
     e.preventDefault();
@@ -26,23 +27,36 @@ const Tasks = ({ boardName, folderName }) => {
     dispatch(addTask({ username, boardName, folderName, task: { name, description, date } }));
     e.target.reset();
     setFormVisible(false);
+    setSuccessMessage(`Task created in folder ${folderName} board ${boardName} successfully.`);
   };
 
   const handleStatusChange = (index, status) => {
     dispatch(updateTaskStatus({ username, boardName, folderName, index, status }));
+    setSuccessMessage(`Task marked as ${status} successfully.`);
+  };
+
+  const handleDeleteTask = (index) => {
+    dispatch(deleteTask({ username, boardName, folderName, index }));
+    setSuccessMessage(`Task deleted from folder ${folderName} board ${boardName} successfully.`);
   };
 
   useEffect(() => {
-    if (notification) {
-      const timer = setTimeout(() => setNotification(''), 3000);
+    if (notification || successMessage) {
+      const timer = setTimeout(() => {
+        setNotification('');
+        setSuccessMessage('');
+      }, 3000);
       return () => clearTimeout(timer);
     }
-  }, [notification]);
+  }, [notification, successMessage]);
 
   return (
     <div className="task-container">
-      {/* Notification */}
+      {/* 🔴 Error Notification */}
       {notification && <div className="custom-notification">{notification}</div>}
+
+      {/* ✅ Success Notification */}
+      {successMessage && <div className="custom-success">{successMessage}</div>}
 
       <button className="btn btn-sm btn-dark" onClick={() => setFormVisible((prev) => !prev)}>
         Add Task
@@ -91,7 +105,7 @@ const Tasks = ({ boardName, folderName }) => {
             <button className="btn btn-sm btn-dark mx-1" onClick={() => handleStatusChange(idx, 'completed')}>Completed</button>
             <button
               className="btn btn-sm btn-dark mx-1"
-              onClick={() => dispatch(deleteTask({ username, boardName, folderName, index: idx }))}
+              onClick={() => handleDeleteTask(idx)}
             >
               Delete Task
             </button>

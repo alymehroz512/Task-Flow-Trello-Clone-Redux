@@ -7,32 +7,46 @@ const Boards = () => {
   const dispatch = useDispatch();
   const { username } = useSelector((state) => state.users);
   const boards = useSelector((state) => state.boards[username] || []);
-  const [notification, setNotification] = useState('');
+
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleAddBoard = (e) => {
     e.preventDefault();
     const name = e.target.board.value.trim();
+
     if (!name) {
-      setNotification('Please enter board name.');
+      setErrorMessage('Please enter board name.');
       return;
     }
+
     dispatch(addBoard({ username, name }));
+    setSuccessMessage(`${name} board created successfully.`);
     e.target.reset();
   };
 
+  const handleDeleteBoard = (boardName) => {
+    dispatch(deleteBoard({ username, name: boardName }));
+    setSuccessMessage(`${boardName} board deleted successfully.`);
+  };
+
   useEffect(() => {
-    if (notification) {
-      const timer = setTimeout(() => setNotification(''), 3000);
+    if (successMessage || errorMessage) {
+      const timer = setTimeout(() => {
+        setSuccessMessage('');
+        setErrorMessage('');
+      }, 3000);
       return () => clearTimeout(timer);
     }
-  }, [notification]);
+  }, [successMessage, errorMessage]);
 
   return (
     <div className="container" style={{ padding: '1rem' }}>
-      {/* Notification */}
-      {notification && <div className="custom-notification">{notification}</div>}
+      {/* ✅ Notifications */}
+      {errorMessage && <div className="custom-error">{errorMessage}</div>}
+      {successMessage && <div className="custom-success">{successMessage}</div>}
 
-      {/* Add Board Form with Floating Input */}
+      {/* Add Board Form */}
       <form onSubmit={handleAddBoard}>
         <div className="form-floating mb-3">
           <input
@@ -63,7 +77,7 @@ const Boards = () => {
           <div className="d-flex justify-content-between align-items-center">
             <h3>{board}</h3>
             <button
-              onClick={() => dispatch(deleteBoard({ username, name: board }))}
+              onClick={() => handleDeleteBoard(board)}
               className="btn btn-danger btn-sm"
             >
               Delete Board

@@ -1,7 +1,6 @@
-// src/components/Login.jsx
 import { useDispatch, useSelector } from 'react-redux';
 import { setUser } from '../redux/usersSlice';
-import LoginImage from '../images/login-image.svg'; // Placeholder for the image
+import LoginImage from '../images/login-image.svg';
 import { useState } from 'react';
 
 const staticUsers = [
@@ -17,50 +16,51 @@ const Login = () => {
   const username = useSelector((state) => state.users.username);
 
   const [alert, setAlert] = useState(null);
+  const [success, setSuccess] = useState(null); // ✅ Success notification state
 
   const handleLogin = (e) => {
     e.preventDefault();
     const input = e.target.username.value.trim();
 
-    // Validate input: Ensure both first and last names are provided
     if (!input) {
       setAlert('Please enter username first.');
-      setTimeout(() => setAlert(null), 3000); // Hide alert after 3 seconds
+      setTimeout(() => setAlert(null), 3000);
       return;
     }
 
-    // Split the input into first and last name
     const nameParts = input.split(' ');
-    
-    // Check if both first and last names are entered
     if (nameParts.length < 2) {
       setAlert('Please enter both first and last name.');
-      setTimeout(() => setAlert(null), 3000); // Hide alert after 3 seconds
+      setTimeout(() => setAlert(null), 3000);
       return;
     }
 
-    // Capitalize the first letter of each part of the name
     const capitalizedInput = nameParts
       .map(name => name.charAt(0).toUpperCase() + name.slice(1).toLowerCase())
       .join(' ');
 
-    // Check if the capitalized name matches any user in staticUsers
     if (!staticUsers.some(user => user.toLowerCase() === capitalizedInput.toLowerCase())) {
       setAlert('Please check username.');
-      setTimeout(() => setAlert(null), 3000); // Hide alert after 3 seconds
+      setTimeout(() => setAlert(null), 3000);
       return;
     }
 
-    // If everything is fine, dispatch the user
+    // ✅ Dispatch user and show success notification
     dispatch(setUser(capitalizedInput));
+    setSuccess(`${capitalizedInput} logged in successfully.`);
+    setTimeout(() => setSuccess(null), 3000);
+
+    // Clear input field
+    e.target.username.value = '';
   };
 
   return (
     <div className="container login-wrapper mt-5 mb-5 bg-light rounded-4 d-flex align-items-center shadow">
+      {/* ✅ Separate alert and success notification divs */}
       {alert && <div className="custom-notification">{alert}</div>}
-      
+      {success && <div className="custom-success">{success}</div>}
+
       <div className="row w-100 p-5">
-        {/* Left Column (Image) */}
         <div className="col-md-6 d-none d-md-flex align-items-center justify-content-center">
           <img
             src={LoginImage}
@@ -69,7 +69,6 @@ const Login = () => {
           />
         </div>
 
-        {/* Right Column (Form with VR Line) */}
         <div className="col-md-6 d-flex align-items-center justify-content-center border-start login-form-col">
           <div className="login-form-container w-75">
             <h2 className="mb-4 text-center">Login</h2>

@@ -7,30 +7,46 @@ const Folders = ({ boardName }) => {
   const dispatch = useDispatch();
   const username = useSelector((state) => state.users.username);
   const folders = useSelector((state) => state.folders[username]?.[boardName] || []);
-  const [notification, setNotification] = useState('');
+
+  const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
   const handleAddFolder = (e) => {
     e.preventDefault();
     const name = e.target.folder.value.trim();
+
     if (!name) {
-      setNotification('Please enter folder name.');
+      setErrorMessage('Please enter folder name.');
       return;
     }
+
     dispatch(addFolder({ username, boardName, name }));
+    setSuccessMessage(`${name} folder created in ${boardName} board successfully.`);
     e.target.reset();
   };
 
+  const handleDeleteFolder = (folderName) => {
+    dispatch(deleteFolder({ username, boardName, name: folderName }));
+    setSuccessMessage(`${folderName} folder deleted from ${boardName} board successfully.`);
+  };
+
   useEffect(() => {
-    if (notification) {
-      const timer = setTimeout(() => setNotification(''), 3000);
+    if (errorMessage || successMessage) {
+      const timer = setTimeout(() => {
+        setErrorMessage('');
+        setSuccessMessage('');
+      }, 3000);
       return () => clearTimeout(timer);
     }
-  }, [notification]);
+  }, [errorMessage, successMessage]);
 
   return (
     <div className="container mt-4">
-      {/* Notification */}
-      {notification && <div className="custom-notification">{notification}</div>}
+      {/* ✅ Error Notification */}
+      {errorMessage && <div className="custom-error">{errorMessage}</div>}
+
+      {/* ✅ Success Notification */}
+      {successMessage && <div className="custom-success">{successMessage}</div>}
 
       {/* Floating Input for Folder Name */}
       <form onSubmit={handleAddFolder}>
@@ -65,7 +81,7 @@ const Folders = ({ boardName }) => {
           <div className="d-flex justify-content-between align-items-center">
             <h4>{folder}</h4>
             <button
-              onClick={() => dispatch(deleteFolder({ username, boardName, name: folder }))}
+              onClick={() => handleDeleteFolder(folder)}
               className="btn btn-danger btn-sm"
             >
               Delete Folder
