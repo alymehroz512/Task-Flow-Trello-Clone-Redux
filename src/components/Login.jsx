@@ -13,10 +13,9 @@ const staticUsers = [
 
 const Login = () => {
   const dispatch = useDispatch();
-  const username = useSelector((state) => state.users.username);
 
   const [alert, setAlert] = useState(null);
-  const [success, setSuccess] = useState(null); // ✅ Success notification state
+  const [success, setSuccess] = useState(null); // Success notification state
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -45,7 +44,7 @@ const Login = () => {
       return;
     }
 
-    // ✅ Dispatch user and show success notification
+    // Dispatch user and show success notification
     dispatch(setUser(capitalizedInput));
     setSuccess(`${capitalizedInput} logged in successfully.`);
     setTimeout(() => setSuccess(null), 3000);
@@ -56,7 +55,7 @@ const Login = () => {
 
   return (
     <div className="container login-wrapper mt-5 mb-5 bg-light rounded-4 d-flex align-items-center shadow">
-      {/* ✅ Separate alert and success notification divs */}
+      {/* Separate alert and success notification divs */}
       {alert && <div className="custom-notification">{alert}</div>}
       {success && <div className="custom-success">{success}</div>}
 

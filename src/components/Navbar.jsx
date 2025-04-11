@@ -1,5 +1,4 @@
 // src/components/Navbar.jsx
-
 const Navbar = () => {
   return (
     <nav className="navbar navbar-light bg-light">

@@ -42,7 +42,7 @@ const Boards = () => {
 
   return (
     <div className="container" style={{ padding: '1rem' }}>
-      {/* ✅ Notifications */}
+      {/* Notifications */}
       {errorMessage && <div className="custom-error">{errorMessage}</div>}
       {successMessage && <div className="custom-success">{successMessage}</div>}
 

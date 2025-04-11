@@ -42,10 +42,10 @@ const Folders = ({ boardName }) => {
 
   return (
     <div className="container mt-4">
-      {/* ✅ Error Notification */}
+      {/* Error Notification */}
       {errorMessage && <div className="custom-error">{errorMessage}</div>}
 
-      {/* ✅ Success Notification */}
+      {/* Success Notification */}
       {successMessage && <div className="custom-success">{successMessage}</div>}
 
       {/* Floating Input for Folder Name */}

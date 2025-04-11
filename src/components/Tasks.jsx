@@ -52,10 +52,10 @@ const Tasks = ({ boardName, folderName }) => {
 
   return (
     <div className="task-container">
-      {/* 🔴 Error Notification */}
+      {/* Error Notification */}
       {notification && <div className="custom-notification">{notification}</div>}
 
-      {/* ✅ Success Notification */}
+      {/* Success Notification */}
       {successMessage && <div className="custom-success">{successMessage}</div>}
 
       <button className="btn btn-sm btn-dark" onClick={() => setFormVisible((prev) => !prev)}>

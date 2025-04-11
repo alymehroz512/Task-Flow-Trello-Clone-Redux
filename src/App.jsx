@@ -11,13 +11,13 @@ const App = () => {
   const dispatch = useDispatch();
 
   const [success, setSuccess] = useState(null);
-  const isFirstLoad = useRef(true); // ✅ Track if it's the first load
+  const isFirstLoad = useRef(true); // Track if it's the first load
 
-  // ✅ Show login success message (but not on first load)
+  // Show login success message (but not on first load)
   useEffect(() => {
     if (isFirstLoad.current) {
       isFirstLoad.current = false;
-      return; // 🔥 Skip message on first load
+      return; // Skip message on first load
     }
 
     if (username) {
@@ -26,7 +26,7 @@ const App = () => {
     }
   }, [username]);
 
-  // ✅ Logout handler
+  // Logout handler
   const handleLogout = () => {
     setSuccess(`${username} logged out successfully.`);
     dispatch(logoutUser());
@@ -37,7 +37,7 @@ const App = () => {
     <div>
       <Navbar />
 
-      {/* ✅ Success message on login/logout */}
+      {/* Success message on login/logout */}
       {success && <div className="custom-success">{success}</div>}
 
       {username ? (

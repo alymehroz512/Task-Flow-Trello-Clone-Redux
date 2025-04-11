@@ -8,7 +8,7 @@ import tasksReducer from './tasksSlice';
 import storage from 'redux-persist/lib/storage';
 import { persistReducer, persistStore } from 'redux-persist';
 import { combineReducers } from 'redux';
-import { thunk } from 'redux-thunk'; // ✅ Named import
+import { thunk } from 'redux-thunk'; 
 
 const persistConfig = {
   key: 'root',
